@@ -1,0 +1,40 @@
+# --- Secrets / environment ---
+.env
+.env.*
+!.env.example
+
+# --- Java / Maven ---
+backend/target/
+*.class
+*.jar
+*.war
+!.mvn/wrapper/maven-wrapper.jar
+hs_err_pid*
+replay_pid*
+
+# --- Node / Vite ---
+frontend/node_modules/
+frontend/dist/
+frontend/.vite/
+*.local
+
+# --- Logs ---
+logs/
+*.log
+npm-debug.log*
+
+# --- IDE / editor ---
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db
+
+# --- Test / coverage ---
+coverage/
+frontend/coverage/
+backend/target/site/
+
+# --- Docker ---
+docker-compose.override.yml
