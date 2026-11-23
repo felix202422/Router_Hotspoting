@@ -8,15 +8,15 @@ revenue from a full dashboard.
 
 ## Repository status
 
-> **Phase 1 (Requirements & Hardware Feasibility) — COMPLETE, awaiting owner approval.**
-> No application code has been written yet, by design. The next step is Phase 2 after the
-> owner approves `docs/architecture/implementation-plan.md` and completes the on-site ZTE
-> checklist (`docs/network/zte-g5ts-feasibility.md` §6).
+> **Phases 1 and 2 COMPLETE and approved by the owner. No application code yet, by design —
+> Phase 3 (frontend) begins after this approval gate.** The on-site ZTE checklist
+> (`docs/network/zte-g5ts-feasibility.md` §6) remains open but only gates Phase 5 hardware
+> configuration (decision D-020).
 
 | Phase | Status |
 |---|---|
-| 1 — Requirements & hardware feasibility | ✅ Docs complete — ⏸ awaiting approval |
-| 2 — System planning & design | ⏳ Not started |
+| 1 — Requirements & hardware feasibility | ✅ Complete & approved |
+| 2 — System planning & design | ✅ Complete & approved (2026-11-23) |
 | 3 — Frontend development | ⏳ Not started |
 | 4 — Backend development | ⏳ Not started |
 | 5 — Integrations (payment / SMS / hotspot) | ⏳ Not started |
@@ -27,8 +27,14 @@ revenue from a full dashboard.
 
 | Document | Purpose |
 |---|---|
+| [`docs/architecture/requirements.md`](docs/architecture/requirements.md) | Functional & non-functional requirements with master-prompt traceability |
+| [`docs/architecture/use-cases.md`](docs/architecture/use-cases.md) | Use-case diagram + narratives + business-rule invariants |
+| [`docs/architecture/system-architecture.md`](docs/architecture/system-architecture.md) | Component/deployment architecture, backend structure, security architecture |
+| [`docs/database/er-diagram.md`](docs/database/er-diagram.md) | Full relational schema (source for Flyway `V1__init.sql`) |
+| [`docs/api/api-contract.md`](docs/api/api-contract.md) | Complete REST contract (portal + admin) — binding for Phase 4 |
+| [`docs/architecture/ui-wireframes.md`](docs/architecture/ui-wireframes.md) | Portal & admin wireframes + responsive behaviour — binding for Phase 3 |
 | [`docs/network/zte-g5ts-feasibility.md`](docs/network/zte-g5ts-feasibility.md) | What the ZTE G5TS can/cannot do + on-site verification checklist |
-| [`docs/network/network-architecture-options.md`](docs/network/network-architecture-options.md) | Architecture options A/B1/B2/C, comparison, recommendation |
+| [`docs/network/network-architecture-options.md`](docs/network/network-architecture-options.md) | Architecture options A/B1/B2/C, comparison, recommendation (B1) |
 | [`docs/network/hotspot-adapter-design.md`](docs/network/hotspot-adapter-design.md) | Modular controller integration layer |
 | [`docs/architecture/mvp-scope.md`](docs/architecture/mvp-scope.md) | MVP cut line and explicit non-goals |
 | [`docs/architecture/decision-log.md`](docs/architecture/decision-log.md) | Every architectural decision and its rationale |
