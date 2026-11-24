@@ -8,9 +8,9 @@ revenue from a full dashboard.
 
 ## Repository status
 
-> **Phases 1 and 2 approved. Phase 3 (frontend) IMPLEMENTED and awaiting owner approval
-> (decision D-008 gate).** The frontend runs against a mock API layer that simulates the
-> Phase 2 contract; the real Spring Boot backend lands in Phase 4. The on-site ZTE checklist
+> **Phases 1–3 approved. Phase 4 (backend) in progress.** The frontend runs against a
+> mock API layer that simulates the Phase 2 contract; the real Spring Boot backend lands in
+> Phase 4. The on-site ZTE checklist
 > (`docs/network/zte-g5ts-feasibility.md` §6) remains open but only gates Phase 5 hardware
 > configuration (decision D-020).
 
@@ -18,8 +18,8 @@ revenue from a full dashboard.
 |---|---|
 | 1 — Requirements & hardware feasibility | ✅ Complete & approved |
 | 2 — System planning & design | ✅ Complete & approved (2026-11-23) |
-| 3 — Frontend development | 🧪 Implemented, awaiting approval (2026-11-24) |
-| 4 — Backend development | ⏳ Not started |
+| 3 — Frontend development | ✅ Complete & approved (2026-11-24) |
+| 4 — Backend development | 🚧 In progress |
 | 5 — Integrations (payment / SMS / hotspot) | ⏳ Not started |
 | 6 — Testing | ⏳ Not started |
 | 7 — Deployment | ⏳ Not started |

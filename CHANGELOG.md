@@ -6,9 +6,13 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added — Phase 4: Backend Development (in progress)
+- Project scaffolding pending this section's first commit (Spring Boot 3 / Java 21,
+  Flyway `V1__init.sql` from the Phase 2 ER, API contract implementation).
+
 ## [0.3.0] — 2026-11-24
 
-### Added — Phase 3: Frontend Development (implemented, pending approval)
+### Added — Phase 3: Frontend Development (approved 2026-11-24, D-024)
 - Vite + React 18 + TypeScript (strict) + Tailwind build config with pinned dependencies,
   `@` path alias, navy/electric design tokens, 44px tap targets, no global horizontal overflow.
 - `frontend/src/config/brand.ts` — single source of truth for business identity (placeholder
