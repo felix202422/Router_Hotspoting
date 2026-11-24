@@ -1,6 +1,6 @@
 # Decision Log
 
-**Phase:** 1 — Requirements and Hardware Feasibility
+**Phase:** 3 — Frontend Development (append-only log since Phase 1)
 **Rule:** every architectural decision is recorded here with rationale. Append-only; supersede
 by adding a new entry referencing the old ID.
 
@@ -27,6 +27,8 @@ by adding a new entry referencing the old ID.
 | D-019 | 2026-11-23 | **D-015 confirmed: MIT license** approved as part of the Phase 2 approval | Owner approval message (applies to "all the works") | ✅ Confirmed |
 | D-020 | 2026-11-23 | **D-009 provisional → Option B1 committed as the build target**; MikroTik adapter is the production `HotspotController`. T1–T9 results may still trigger a re-evaluation (Option C) **before Phase 5 hardware config**, never before Phases 3–4 (adapter isolation makes the switch config-only) | Owner approval of plan recommending B1 | ✅ Committed |
 | D-021 | 2026-11-23 | **Phase 2 baselines are binding inputs for Phase 3 (UI) and Phase 4 (API/DB)**: `requirements.md`, `use-cases.md`, `system-architecture.md`, `er-diagram.md` (→ `V1__init.sql`), `api-contract.md`, `ui-wireframes.md` | Phase 2 deliverables | ✅ Approved |
+| D-022 | 2026-11-24 | **Frontend consumes a single API facade** (`services/api.ts`) with mock/live modes switched by `VITE_API_MODE`; mock backend simulates the Phase 2 contract (idempotent purchase, D-007 extension, token rotation, rate limits, TZ-day analytics) so Phase 3 is verifiable without a backend | Phase 3 implementation; master prompt A17 (mock explicitly not production) | 🧪 Implemented — pending approval |
+| D-023 | 2026-11-24 | **Mock admin login persists access + profile in localStorage identically to live mode** (bug fix: reload previously bounced admins to the login page because the mock branch skipped token storage) | Phase 3 browser smoke test finding | 🛠 Fixed in 0.3.0 |
 
 ## Open items (blockers for later phases, not for Phase 1 approval)
 
@@ -35,5 +37,5 @@ by adding a new entry referencing the old ID.
 | ZTE WebUI verification checklist T1–T9 | Before Phase 5 hardware config (does NOT block Phases 3–4, D-020) | Run tests in `zte-g5ts-feasibility.md` §6, send screenshots |
 | Daraja sandbox credentials | Phase 5 | Register/obtain from Vodacom; share via secure channel, never in git |
 | Africa's Talking credentials | Phase 5 | Create account/sandbox key |
-| Business name, logo, support contact, package examples with real TZS prices | Phase 3 (portal UI) — **needed now** | Provide branding assets (wireframes use `HotspotName` placeholder) |
+| Business name, logo, support contact, package examples with real TZS prices | Phase 3 (portal UI) — **placeholder `HotspotName` + demo prices used in Phase 3**; update `frontend/src/config/brand.ts` + package rows when supplied | Provide branding assets before launch |
 | MikroTik purchase decision | Phase 5 | Approve Option B1 cost (or trigger T7 test for Option C) |

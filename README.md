@@ -8,8 +8,9 @@ revenue from a full dashboard.
 
 ## Repository status
 
-> **Phases 1 and 2 COMPLETE and approved by the owner. No application code yet, by design —
-> Phase 3 (frontend) begins after this approval gate.** The on-site ZTE checklist
+> **Phases 1 and 2 approved. Phase 3 (frontend) IMPLEMENTED and awaiting owner approval
+> (decision D-008 gate).** The frontend runs against a mock API layer that simulates the
+> Phase 2 contract; the real Spring Boot backend lands in Phase 4. The on-site ZTE checklist
 > (`docs/network/zte-g5ts-feasibility.md` §6) remains open but only gates Phase 5 hardware
 > configuration (decision D-020).
 
@@ -17,11 +18,27 @@ revenue from a full dashboard.
 |---|---|
 | 1 — Requirements & hardware feasibility | ✅ Complete & approved |
 | 2 — System planning & design | ✅ Complete & approved (2026-11-23) |
-| 3 — Frontend development | ⏳ Not started |
+| 3 — Frontend development | 🧪 Implemented, awaiting approval (2026-11-24) |
 | 4 — Backend development | ⏳ Not started |
 | 5 — Integrations (payment / SMS / hotspot) | ⏳ Not started |
 | 6 — Testing | ⏳ Not started |
 | 7 — Deployment | ⏳ Not started |
+
+## Running the frontend (Phase 3)
+
+```bash
+cd frontend
+npm install
+npm run dev        # http://localhost:5173  (mock API mode by default)
+npm run build      # type-check + production build
+npm run preview    # serve the production build
+```
+
+- **Mock mode** (default) simulates the full API contract in-browser — no backend required.
+  Demo admin: `admin@hotspot.co.tz` / `Admin123!` · demo portal token: `DEMO-7Q2F-9X3B-2KLM` ·
+  purchase fails for phone numbers ending `0000`.
+- **Live mode**: set `VITE_API_MODE=live` (`.env`) to hit the Spring Boot API from Phase 4 —
+  no page code changes required.
 
 ## Key documents
 
@@ -40,10 +57,10 @@ revenue from a full dashboard.
 | [`docs/architecture/decision-log.md`](docs/architecture/decision-log.md) | Every architectural decision and its rationale |
 | [`docs/architecture/implementation-plan.md`](docs/architecture/implementation-plan.md) | Phases 2–7 plan, API outline, ER draft, risk register |
 
-## Planned technology stack
+## Technology stack
 
-- **Frontend:** React, TypeScript, Vite, Tailwind CSS, React Router, Lucide icons, Recharts
-- **Backend:** Java 21, Spring Boot, Spring Security, JWT (admin auth), REST
+- **Frontend (Phase 3, implemented):** React 18, TypeScript (strict), Vite, Tailwind CSS, React Router, Lucide icons, Recharts
+- **Backend (Phase 4):** Java 21, Spring Boot, Spring Security, JWT (admin auth), REST
 - **Database:** PostgreSQL with Flyway migrations
 - **Infra:** Docker Compose, Nginx reverse proxy, environment-based config, structured logging
 - **Network:** ZTE G5TS (internet uplink) + MikroTik RouterOS Hotspot (enforcement, recommended)
@@ -76,4 +93,4 @@ paid-wifi-hotspot/
 
 ## License
 
-MIT (see [`LICENSE`](LICENSE)) — pending owner confirmation (decision D-015).
+MIT (see [`LICENSE`](LICENSE)) — confirmed by owner (decisions D-019 / D-015).

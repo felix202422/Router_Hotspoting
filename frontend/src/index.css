@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-slate-50 text-slate-800 font-sans antialiased;
+    /* no horizontal overflow anywhere (NFR-01) */
+    overflow-x: hidden;
+  }
+  * {
+    @apply border-slate-200;
+  }
+  :focus-visible {
+    @apply outline-none ring-2 ring-electric-600 ring-offset-2;
+  }
+  h1 {
+    @apply text-2xl font-bold tracking-tight text-slate-900;
+  }
+  h2 {
+    @apply text-lg font-semibold text-slate-900;
+  }
+  h3 {
+    @apply text-base font-semibold text-slate-900;
+  }
+}
+
+@layer components {
+  /* Touch-friendly minimum tap target (44px) on interactive elements */
+  .tap {
+    @apply min-h-[44px] min-w-[44px];
+  }
+}
