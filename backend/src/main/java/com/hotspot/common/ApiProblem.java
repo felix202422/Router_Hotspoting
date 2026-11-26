@@ -27,6 +27,11 @@ public class ApiProblem extends RuntimeException {
         return new ApiProblem(401, "Unauthorized", detail, null);
     }
 
+    /** 401 with a contract-specific title (e.g. P5's generic token error). */
+    public static ApiProblem unauthorized(String title, String detail) {
+        return new ApiProblem(401, title, detail, null);
+    }
+
     public static ApiProblem forbidden(String detail) {
         return new ApiProblem(403, "Forbidden", detail, null);
     }

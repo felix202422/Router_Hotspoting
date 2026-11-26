@@ -1,6 +1,11 @@
 package com.hotspot.integration.payment;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.util.HexFormat;
 import java.util.concurrent.Executors;
+import javax.crypto.Mac;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import org.slf4j.Logger;
@@ -27,6 +32,8 @@ public class MockPaymentProvider implements PaymentProvider {
 
     private final ApplicationEventPublisher events;
     private final long callbackDelaySeconds;
+    /** Dev-only HMAC secret (DARAJA_WEBHOOK_SECRET from env, never committed). */
+    private final String webhookSecret;
     private final ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor(r -> {
         Thread t = new Thread(r, "mock-payment-callback");
         t.setDaemon(true);
@@ -34,9 +41,11 @@ public class MockPaymentProvider implements PaymentProvider {
     });
 
     public MockPaymentProvider(ApplicationEventPublisher events,
-                               @Value("${app.payment.mock-callback-seconds:4}") long callbackDelaySeconds) {
+                               @Value("${app.payment.mock-callback-seconds:4}") long callbackDelaySeconds,
+                               @Value("${app.payment.webhook-secret:}") String webhookSecret) {
         this.events = events;
         this.callbackDelaySeconds = callbackDelaySeconds;
+        this.webhookSecret = webhookSecret;
     }
 
     @Override
@@ -69,7 +78,24 @@ public class MockPaymentProvider implements PaymentProvider {
 
     @Override
     public boolean verifySignature(String rawBody, String signatureHeader) {
-        // No external caller in mock mode; signature checks are exercised against Daraja (Phase 5).
-        return true;
+        // DEV-ONLY HMAC check so P4 can be smoke-tested without pretending this is
+        // a real provider integration (D-029). Empty secret = fail closed.
+        if (webhookSecret == null || webhookSecret.isBlank()) {
+            log.warn("Mock webhook secret not configured — rejecting callback");
+            return false;
+        }
+        try {
+            Mac mac = Mac.getInstance("HmacSHA256");
+            mac.init(new SecretKeySpec(webhookSecret.getBytes(StandardCharsets.UTF_8), "HmacSHA256"));
+            String expected = HexFormat.of().formatHex(mac.doFinal(
+                    (rawBody == null ? "" : rawBody).getBytes(StandardCharsets.UTF_8)));
+            String supplied = signatureHeader.startsWith("sha256=")
+                    ? signatureHeader.substring(7) : signatureHeader;
+            return MessageDigest.isEqual(expected.getBytes(StandardCharsets.UTF_8),
+                    supplied.trim().getBytes(StandardCharsets.UTF_8));
+        } catch (RuntimeException | java.security.GeneralSecurityException e) {
+            log.warn("Mock webhook signature check failed ({})", e.getClass().getSimpleName());
+            return false;
+        }
     }
 }

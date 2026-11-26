@@ -77,7 +77,7 @@ public class TokenService {
      */
     public AuthenticatedToken validate(String rawToken) {
         if (rawToken == null || rawToken.isBlank()) {
-            throw ApiProblem.unauthorized("Invalid or expired access token.");
+            throw TokenService.generic401();
         }
         AccessToken token = tokens.findByTokenHash(JwtService.sha256Hex(rawToken.trim()))
                 .orElseThrow(TokenService::generic401);
@@ -119,7 +119,10 @@ public class TokenService {
     }
 
     private static ApiProblem generic401() {
-        return ApiProblem.unauthorized("Invalid or expired access token.");
+        // Contract P5: identical title for invalid, revoked, expired, suspended —
+        // never reveal which check failed (FR-C11).
+        String message = "Invalid or expired access token";
+        return ApiProblem.unauthorized(message, message);
     }
 
     public Customer customerOf(Subscription subscription) {

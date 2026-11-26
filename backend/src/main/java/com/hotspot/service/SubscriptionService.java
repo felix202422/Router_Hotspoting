@@ -236,6 +236,52 @@ public class SubscriptionService {
         return sessions.findFirstBySubscriptionIdAndEndedAtIsNull(subscription.getId()).isPresent();
     }
 
+    /**
+     * P5 reconnect: ensures a live controller-backed session exists, returning
+     * the time it was established. Existing live sessions are reused; a new
+     * grant goes through the SAME controller SPI as activation (D-010) — no
+     * made-up session state (FR-D06). If the controller refuses the grant the
+     * customer is told honestly instead of being shown a fake "CONNECTED".
+     */
+    @Transactional
+    public Instant ensureLiveSession(Subscription subscription) {
+        Instant now = Instant.now();
+        var existing = sessions.findFirstBySubscriptionIdAndEndedAtIsNull(subscription.getId());
+        if (existing.isPresent()) {
+            return existing.get().getStartedAt();
+        }
+
+        Customer customer = subscription.getCustomer();
+        com.hotspot.domain.Package pkg = subscription.getPkg();
+        GrantResult result;
+        try {
+            result = controller.grantAccess(new GrantRequest(subscription.getId(),
+                    customer.getPhoneE164(), subscription.getEndsAt(),
+                    pkg.getMaxDownloadKbps(), pkg.getMaxUploadKbps(), pkg.getDeviceLimit()));
+        } catch (RuntimeException e) {
+            log.error("Controller grant error during token login for subscription {}", subscription.getId(), e);
+            throw ApiProblem.unprocessable("Controller unavailable",
+                    "Could not establish a session. Please try again shortly.");
+        }
+        if (!result.ok()) {
+            throw ApiProblem.unprocessable("Controller unavailable",
+                    "Could not establish a session: " + result.error());
+        }
+
+        // controllerSessionId is unique: reuse the row if a previous grant was revoked.
+        ActiveSession row = sessions.findByControllerSessionId(result.grantRef()).orElseGet(ActiveSession::new);
+        if (row.getId() == null) {
+            row.setSubscription(subscription);
+            row.setControllerSessionId(result.grantRef());
+            // IP stays NULL until the controller reports it (D-027, FR-D06).
+            row.setIpAddress(null);
+        }
+        row.setStartedAt(now);
+        row.setEndedAt(null);
+        row.setEndReason(null);
+        return sessions.save(row).getStartedAt();
+    }
+
     /** Active token row for resend/inspection (never exposes the raw value). */
     public java.util.Optional<AccessToken> activeToken(Long subscriptionId) {
         return tokens.findBySubscriptionIdAndStatus(subscriptionId, TokenStatus.ACTIVE).stream().findFirst();

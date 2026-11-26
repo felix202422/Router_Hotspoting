@@ -6,6 +6,39 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added — Phase 2, P1–P7 customer portal API (2026-11-26)
+- `PortalController` + `PortalService`: **P1** `GET /packages` (DB-only active
+  packages), **P5** `POST /auth/token-login` (generic 401 for every invalid
+  token, 5/min per IP + token prefix, device binding, real controller grant only),
+  **P6** `GET /subscriptions/current`, **P7** `POST /device-replacement-requests`
+  (PENDING, exact contract message). P6/P7 accept both `X-Access-Token` and
+  `Authorization: Bearer`; P7's body token is authoritative (D-030).
+- `PurchaseController` + `PurchaseService`: **P2** `POST /purchases` (E.164
+  normalization, 1/30 s + 10/hour per phone, DB-only packages, opaque `pur_`
+  reference), **P3** `GET /purchases/{purchaseId}` (no phone, token or PII).
+- `WebhookController` + `PaymentWebhookIngestionService`: **P4**
+  `POST /webhooks/payments/daraja` — rate limit → optional IP allowlist → HMAC
+  verify (env-only secret) → secret-free envelope → replay guard → event row in
+  its own transaction → shared idempotent result core. Replays return 200
+  `IGNORED`; invalid signature 401, malformed 400 (D-029).
+- `MockPaymentProvider.verifySignature` performs dev-only HMAC-SHA256 with
+  `DARAJA_WEBHOOK_SECRET` and fails closed when unset; Daraja stays fail-closed
+  until Phase 5. `WEBHOOK_ALLOWED_IPS` and mock callback delay are env-driven.
+
+### Fixed — P1–P7 integration smoke findings (D-031)
+- Token rotation now flushes instead of clearing the persistence context, so
+  verified payments no longer break controller grant/SMS with a detached
+  Customer; P3/P6 map lazy associations inside read-only transactions; blank
+  tokens yield the same generic 401 as invalid/expired ones.
+
+### Verified — P1–P7 smoke (2026-11-26)
+- `mvn -q test` green; full HTTP smoke: P1 200; P2/P3 SUCCESS and FAILED paths;
+  P3 no PII; P4 200 `PROCESSED` then `IGNORED` replay, 401 bad/no signature,
+  400 malformed; P5 invalid 401, `401×5 → 429`, valid CONNECTED, 409 device
+  mismatch; P6 both header forms 200; P7 201/400/401; revoked token 401.
+  DB invariants: one active device/session per subscription, one PENDING
+  replacement, webhook events persisted. No 500s in the final run.
+
 ### Added — Phase 2, A1–A4 admin auth (2026-11-26)
 - `AuthController` + `AdminAuthService`: **A1** `POST /api/v1/admin/auth/login`
   (bcrypt, one generic 401 for unknown-email vs wrong-password — no account

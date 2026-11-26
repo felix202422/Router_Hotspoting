@@ -16,8 +16,13 @@ public interface AccessTokenRepository extends JpaRepository<AccessToken, Long> 
 
     List<AccessToken> findBySubscriptionIdAndStatus(Long subscriptionId, TokenStatus status);
 
-    /** FR-A03 rotation helper: revoke every ACTIVE token of a subscription. */
-    @Modifying(clearAutomatically = true)
+    /**
+     * FR-A03 rotation helper: revoke every ACTIVE token of a subscription.
+     * Flush but DO NOT clear: clearing detaches the Customer/Subscription entities
+     * held by the caller (activation passes them to the controller + SMS steps),
+     * which caused LazyInitializationException after every verified payment.
+     */
+    @Modifying(flushAutomatically = true)
     @Query("update AccessToken t set t.status = :newStatus, t.revokedAt = :now "
             + "where t.subscription.id = :subscriptionId and t.status = :activeStatus")
     int updateStatusForSubscription(@Param("subscriptionId") Long subscriptionId,
