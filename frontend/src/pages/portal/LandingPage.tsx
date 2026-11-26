@@ -41,12 +41,12 @@ export function LandingPage() {
   return (
     <div className="mx-auto w-full max-w-lg">
       {/* Hero */}
-      <section className="rounded-2xl bg-navy-900 px-5 py-7 text-center text-white shadow-card sm:px-6">
-        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-electric-600">
+      <section className="rounded-2xl bg-forest-900 px-5 py-7 text-center text-white shadow-card sm:px-6">
+        <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl bg-citrus-500 text-forest-900">
           <Wifi size={24} aria-hidden />
         </span>
         <h1 className="mt-4 text-2xl font-bold tracking-tight">Welcome to {BRAND.name}</h1>
-        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-electric-100">{BRAND.tagline}</p>
+        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-mint-300">{BRAND.tagline}</p>
       </section>
 
       {/* How it works */}
@@ -54,7 +54,7 @@ export function LandingPage() {
         <ol className="space-y-3">
           {HOW_IT_WORKS.map((step, i) => (
             <li key={step} className="flex items-start gap-3">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-electric-600 text-sm font-bold text-white">
+              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-leaf-600 text-sm font-bold text-white">
                 {i + 1}
               </span>
               <span className="pt-1 text-sm text-slate-700">{step}</span>
@@ -145,13 +145,13 @@ export function LandingPage() {
         <div className="space-y-2 text-sm text-slate-600">
           <p className="flex items-center gap-2">
             <Phone size={16} aria-hidden className="shrink-0 text-slate-400" />
-            <a href={`tel:${BRAND.supportPhone.replace(/\s/g, '')}`} className="font-medium text-electric-600 hover:underline">
+            <a href={`tel:${BRAND.supportPhone.replace(/\s/g, '')}`} className="font-medium text-leaf-600 hover:underline">
               {BRAND.supportPhone}
             </a>
           </p>
           <p className="flex items-center gap-2">
             <MessageCircle size={16} aria-hidden className="shrink-0 text-slate-400" />
-            <span className="font-medium text-electric-600">WhatsApp {BRAND.whatsappPhone}</span>
+            <span className="font-medium text-leaf-600">WhatsApp {BRAND.whatsappPhone}</span>
           </p>
           <p className="text-xs text-slate-500">{BRAND.supportHours}</p>
           <p className="text-xs text-slate-500">{BRAND.location}</p>

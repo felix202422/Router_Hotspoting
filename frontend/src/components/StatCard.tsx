@@ -30,7 +30,7 @@ export function StatCard({ label, value, sub, trend, tone = 'default', icon: Ico
           {trend && <p className="mt-1 truncate text-xs font-medium text-green-600">{trend}</p>}
         </div>
         {Icon && (
-          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-electric-50 text-electric-600">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-leaf-50 text-leaf-600">
             <Icon size={20} aria-hidden />
           </span>
         )}

@@ -7,7 +7,7 @@
     -webkit-text-size-adjust: 100%;
   }
   body {
-    @apply bg-slate-50 text-slate-800 font-sans antialiased;
+    @apply bg-mint-100 text-slate-800 font-sans antialiased;
     /* no horizontal overflow anywhere (NFR-01) */
     overflow-x: hidden;
   }
@@ -15,7 +15,7 @@
     @apply border-slate-200;
   }
   :focus-visible {
-    @apply outline-none ring-2 ring-electric-600 ring-offset-2;
+    @apply outline-none ring-2 ring-leaf-600 ring-offset-2;
   }
   h1 {
     @apply text-2xl font-bold tracking-tight text-slate-900;

@@ -171,7 +171,7 @@ export function PurchasePage() {
                         className={cn(
                           'w-full rounded-xl border p-4 text-left transition',
                           isSelected
-                            ? 'border-electric-600 bg-electric-50 ring-1 ring-electric-600'
+                            ? 'border-leaf-600 bg-leaf-50 ring-1 ring-leaf-600'
                             : 'border-slate-200 bg-white hover:border-slate-300',
                         )}
                       >
@@ -339,7 +339,7 @@ export function PurchasePage() {
           {(paymentStatus === null || paymentStatus === 'PENDING' || paymentStatus === 'REFUNDED') && (
             <Card>
               <div className="text-center">
-                <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-electric-50 text-electric-600">
+                <span className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-leaf-50 text-leaf-600">
                   <Clock size={24} aria-hidden />
                 </span>
                 <h2 className="mt-3 text-lg font-semibold text-slate-900">Check your phone</h2>

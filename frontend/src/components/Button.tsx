@@ -6,8 +6,9 @@ type Variant = 'primary' | 'secondary' | 'outline' | 'danger' | 'success' | 'gho
 type Size = 'sm' | 'md' | 'lg';
 
 const VARIANTS: Record<Variant, string> = {
-  primary: 'bg-electric-600 text-white hover:bg-electric-700 active:bg-electric-700 shadow-sm',
-  secondary: 'bg-navy-900 text-white hover:bg-navy-800 shadow-sm',
+  // Citrus CTA (design kit): orange fill + dark forest text keeps ≥4.5:1 (NFR-02)
+  primary: 'bg-citrus-500 text-forest-900 hover:bg-citrus-600 active:bg-citrus-600 shadow-sm',
+  secondary: 'bg-forest-900 text-white hover:bg-forest-800 shadow-sm',
   outline: 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50',
   danger: 'bg-red-600 text-white hover:bg-red-700 shadow-sm',
   success: 'bg-green-600 text-white hover:bg-green-700 shadow-sm',

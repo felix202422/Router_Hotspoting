@@ -217,7 +217,7 @@ export function OverviewPage() {
         action={
           <Link
             to="/admin/payments"
-            className="text-sm font-medium text-electric-600 hover:text-electric-700"
+            className="text-sm font-medium text-leaf-600 hover:text-leaf-700"
           >
             View all
           </Link>

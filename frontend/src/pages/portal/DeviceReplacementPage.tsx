@@ -56,7 +56,7 @@ export function DeviceReplacementPage() {
       <div className="mx-auto w-full max-w-lg">
         <PageHeader title="Device replacement" subtitle="Moving to a new phone or laptop?" />
         <Card>
-          <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-electric-50 text-electric-600">
+          <span className="flex h-11 w-11 items-center justify-center rounded-lg bg-leaf-50 text-leaf-600">
             <KeyRound size={22} aria-hidden />
           </span>
           <h2 className="mt-3 text-base font-semibold text-slate-900">Sign in first</h2>
@@ -68,7 +68,7 @@ export function DeviceReplacementPage() {
           </Button>
           <p className="mt-3 text-center text-sm text-slate-500">
             Lost your token?{' '}
-            <Link to="/buy" className="font-medium text-electric-600 hover:underline">
+            <Link to="/buy" className="font-medium text-leaf-600 hover:underline">
               Buy a package
             </Link>
           </p>

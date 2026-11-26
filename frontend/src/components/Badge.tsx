@@ -7,7 +7,7 @@ const TONES: Record<Tone, string> = {
   success: 'bg-green-50 text-green-700 border-green-200',
   warning: 'bg-amber-50 text-amber-700 border-amber-200',
   danger: 'bg-red-50 text-red-700 border-red-200',
-  info: 'bg-electric-50 text-electric-700 border-electric-100',
+  info: 'bg-leaf-50 text-leaf-700 border-leaf-100',
   neutral: 'bg-slate-100 text-slate-600 border-slate-200',
 };
 
@@ -15,7 +15,7 @@ const DOTS: Record<Tone, string> = {
   success: 'bg-green-500',
   warning: 'bg-amber-500',
   danger: 'bg-red-500',
-  info: 'bg-electric-500',
+  info: 'bg-leaf-500',
   neutral: 'bg-slate-400',
 };
 

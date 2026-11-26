@@ -30,7 +30,7 @@ export function Drawer({ open, onClose, title, children, footer, width = 'md' }:
 
   return createPortal(
     <div className="fixed inset-0 z-50" role="dialog" aria-modal="true">
-      <div className="absolute inset-0 bg-navy-950/50 animate-fade-in" onClick={onClose} aria-hidden />
+      <div className="absolute inset-0 bg-forest-950/50 animate-fade-in" onClick={onClose} aria-hidden />
       <div
         className={cn(
           'absolute inset-y-0 right-0 flex w-full flex-col bg-white shadow-drawer animate-fade-in',

@@ -156,7 +156,7 @@ export function NetworkPage() {
           </Badge>
 
           <div className="flex items-center gap-2 text-sm text-slate-600">
-            <Activity size={16} className="text-electric-600" aria-hidden />
+            <Activity size={16} className="text-leaf-600" aria-hidden />
             <span>
               <strong>{sessions.length}</strong> active session{sessions.length === 1 ? '' : 's'}
             </span>

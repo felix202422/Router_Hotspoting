@@ -20,7 +20,7 @@ import {
 import type { PackageAnalyticsRow, RevenueBucket } from '@/types';
 
 /** Distinct fills for the package-share pie (high contrast, ordered). */
-export const PIE_COLORS = ['#2563EB', '#16A34A', '#D97706', '#DC2626', '#7C3AED', '#0EA5E9'] as const;
+export const PIE_COLORS = ['#2E7D32', '#F5A623', '#16A34A', '#E8930A', '#1B5E20', '#FDD68A'] as const;
 
 /** Revenue by TZ-day as a filled area (Overview). */
 export function RevenueAreaChart({ data }: { data: RevenueBucket[] }) {
@@ -34,8 +34,8 @@ export function RevenueAreaChart({ data }: { data: RevenueBucket[] }) {
         <Area
           type="monotone"
           dataKey="revenueTzs"
-          stroke="#2563EB"
-          fill="#DBEAFE"
+          stroke="#2E7D32"
+          fill="#DDF3CD"
           fillOpacity={0.35}
           strokeWidth={2}
         />
@@ -53,7 +53,7 @@ export function RevenueBarChart({ data }: { data: RevenueBucket[] }) {
         <XAxis dataKey="period" tickFormatter={(v) => v.slice(5)} fontSize={12} />
         <YAxis tickFormatter={(v) => `${Math.round(v / 1000)}k`} width={50} />
         <Tooltip formatter={(v: number) => `TZS ${v.toLocaleString()}`} />
-        <Bar dataKey="revenueTzs" fill="#2563EB" />
+        <Bar dataKey="revenueTzs" fill="#2E7D32" />
       </BarChart>
     </ResponsiveContainer>
   );

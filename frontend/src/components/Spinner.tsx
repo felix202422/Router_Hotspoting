@@ -8,7 +8,7 @@ export function Spinner({ size = 'md', className }: { size?: keyof typeof SIZES;
       role="status"
       aria-label="Loading"
       className={cn(
-        'inline-block animate-spin rounded-full border-slate-300 border-t-electric-600',
+        'inline-block animate-spin rounded-full border-slate-300 border-t-leaf-600',
         SIZES[size],
         className,
       )}

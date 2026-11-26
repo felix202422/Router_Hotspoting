@@ -36,7 +36,7 @@ export function useToast(): ToastApi {
 const STYLES: Record<Tone, { wrapper: string; icon: typeof Info }> = {
   success: { wrapper: 'border-green-200 bg-green-50 text-green-800', icon: CheckCircle2 },
   error: { wrapper: 'border-red-200 bg-red-50 text-red-800', icon: XCircle },
-  info: { wrapper: 'border-electric-100 bg-electric-50 text-electric-800', icon: Info },
+  info: { wrapper: 'border-leaf-100 bg-leaf-50 text-leaf-800', icon: Info },
 };
 
 export function ToastProvider({ children }: { children: ReactNode }) {

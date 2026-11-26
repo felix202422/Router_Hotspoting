@@ -445,7 +445,7 @@ export function PackagesPage() {
               <input
                 id="pkg-unlimited"
                 type="checkbox"
-                className="h-4 w-4 rounded border-slate-300 accent-electric-600"
+                className="h-4 w-4 rounded border-slate-300 accent-leaf-600"
                 checked={draft.unlimitedData}
                 onChange={(e) => set('unlimitedData', e.target.checked)}
               />

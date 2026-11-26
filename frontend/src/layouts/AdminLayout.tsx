@@ -43,8 +43,8 @@ function NavItems({ onNavigate, compact }: { onNavigate?: () => void; compact?: 
             cn(
               'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
               isActive
-                ? 'bg-electric-600 text-white shadow-sm'
-                : 'text-slate-300 hover:bg-navy-800 hover:text-white',
+                ? 'bg-citrus-500 text-forest-900 shadow-sm'
+                : 'text-slate-300 hover:bg-forest-800 hover:text-white',
             )
           }
         >
@@ -58,8 +58,8 @@ function NavItems({ onNavigate, compact }: { onNavigate?: () => void; compact?: 
 
 function BrandRow({ compact }: { compact?: boolean }) {
   return (
-    <div className="flex h-16 items-center gap-2.5 border-b border-navy-700 px-4">
-      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-electric-600 text-white">
+    <div className="flex h-16 items-center gap-2.5 border-b border-forest-700 px-4">
+      <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-citrus-500 text-forest-900">
         <Wifi size={18} aria-hidden />
       </span>
       {!compact && (
@@ -87,17 +87,17 @@ export function AdminLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-mint-100">
       {/* Desktop sidebar: icon rail at lg, expanded at xl */}
-      <aside className="fixed inset-y-0 left-0 z-30 hidden flex-col bg-navy-900 lg:flex lg:w-16 xl:w-60">
+      <aside className="fixed inset-y-0 left-0 z-30 hidden flex-col bg-forest-900 lg:flex lg:w-16 xl:w-60">
         <BrandRow compact />
         <NavItems compact />
-        <div className="border-t border-navy-700 p-2">
+        <div className="border-t border-forest-700 p-2">
           <button
             type="button"
             onClick={handleLogout}
             title="Log out"
-            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:bg-navy-800 hover:text-white"
+            className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 transition-colors hover:bg-forest-800 hover:text-white"
           >
             <LogOut size={18} className="shrink-0" aria-hidden />
             <span className="hidden xl:inline">Log out</span>
@@ -109,28 +109,28 @@ export function AdminLayout() {
       {drawerOpen && (
         <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true">
           <div
-            className="absolute inset-0 bg-navy-950/50 animate-fade-in"
+            className="absolute inset-0 bg-forest-950/50 animate-fade-in"
             onClick={() => setDrawerOpen(false)}
             aria-hidden
           />
-          <div className="absolute inset-y-0 left-0 flex w-64 flex-col bg-navy-900 shadow-drawer animate-fade-in">
+          <div className="absolute inset-y-0 left-0 flex w-64 flex-col bg-forest-900 shadow-drawer animate-fade-in">
             <div className="flex items-center justify-between pr-3">
               <BrandRow />
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
                 aria-label="Close menu"
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-navy-800 hover:text-white"
+                className="flex h-9 w-9 items-center justify-center rounded-lg text-slate-400 hover:bg-forest-800 hover:text-white"
               >
                 <X size={18} />
               </button>
             </div>
             <NavItems onNavigate={() => setDrawerOpen(false)} />
-            <div className="border-t border-navy-700 p-2">
+            <div className="border-t border-forest-700 p-2">
               <button
                 type="button"
                 onClick={handleLogout}
-                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-navy-800 hover:text-white"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-300 hover:bg-forest-800 hover:text-white"
               >
                 <LogOut size={18} aria-hidden /> Log out
               </button>
@@ -162,7 +162,7 @@ export function AdminLayout() {
               </Badge>
             </span>
             <div className="flex items-center gap-2">
-              <span className="hidden h-9 w-9 items-center justify-center rounded-full bg-navy-900 text-sm font-bold text-white sm:flex">
+              <span className="hidden h-9 w-9 items-center justify-center rounded-full bg-forest-900 text-sm font-bold text-white sm:flex">
                 {profile?.fullName?.charAt(0) ?? 'A'}
               </span>
               <div className="hidden min-w-0 leading-tight md:block">

@@ -39,10 +39,10 @@ export function AdminLoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-navy-900 px-4 py-10">
+    <div className="flex min-h-screen items-center justify-center bg-forest-900 px-4 py-10">
       <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
-          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-electric-600 text-white shadow-sm">
+          <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-citrus-500 text-forest-900 shadow-sm">
             <Wifi size={24} aria-hidden />
           </span>
           <h1 className="mt-3 text-xl font-bold text-white">{BRAND.name}</h1>

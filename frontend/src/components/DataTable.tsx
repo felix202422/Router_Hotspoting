@@ -32,8 +32,10 @@ function defaultCell<T>(row: T, key: string): ReactNode {
 }
 
 /**
- * Responsive data table: real <table> on ≥md, stacked key/value cards below —
+ * Responsive data table: real <table> on ≥lg, stacked key/value cards below —
  * never horizontal scroll (NFR-01: "tables remain usable on small screens").
+ * The card view runs to 1024px because dense admin tables (many columns)
+ * overflow the 768px tablet width.
  */
 export function DataTable<T>({
   columns,
@@ -53,8 +55,8 @@ export function DataTable<T>({
 
   return (
     <>
-      {/* Desktop / tablet */}
-      <div className="hidden md:block">
+      {/* Desktop / tablet landscape */}
+      <div className="hidden lg:block">
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="border-b border-slate-200 bg-slate-50/70">
@@ -98,7 +100,7 @@ export function DataTable<T>({
       </div>
 
       {/* Mobile: stacked cards */}
-      <ul className="space-y-3 md:hidden">
+      <ul className="space-y-3 lg:hidden">
         {rows.map((row) => (
           <li key={getRowKey(row)}>
             <div

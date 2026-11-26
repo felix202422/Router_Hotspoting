@@ -80,7 +80,7 @@ export function TokenLoginPage() {
             className={cn(
               'flex min-h-[44px] w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition',
               hasSubscription === 'yes'
-                ? 'border-electric-600 bg-electric-50 text-electric-700 ring-1 ring-electric-600'
+                ? 'border-leaf-600 bg-leaf-50 text-leaf-700 ring-1 ring-leaf-600'
                 : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300',
             )}
           >
@@ -88,10 +88,10 @@ export function TokenLoginPage() {
               aria-hidden
               className={cn(
                 'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2',
-                hasSubscription === 'yes' ? 'border-electric-600' : 'border-slate-300',
+                hasSubscription === 'yes' ? 'border-leaf-600' : 'border-slate-300',
               )}
             >
-              {hasSubscription === 'yes' && <span className="h-2 w-2 rounded-full bg-electric-600" />}
+              {hasSubscription === 'yes' && <span className="h-2 w-2 rounded-full bg-leaf-600" />}
             </span>
             Yes, I have a token
           </button>
@@ -103,7 +103,7 @@ export function TokenLoginPage() {
             className={cn(
               'flex min-h-[44px] w-full items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition',
               hasSubscription === 'no'
-                ? 'border-electric-600 bg-electric-50 text-electric-700 ring-1 ring-electric-600'
+                ? 'border-leaf-600 bg-leaf-50 text-leaf-700 ring-1 ring-leaf-600'
                 : 'border-slate-200 bg-white text-slate-700 hover:border-slate-300',
             )}
           >
@@ -111,10 +111,10 @@ export function TokenLoginPage() {
               aria-hidden
               className={cn(
                 'flex h-4 w-4 shrink-0 items-center justify-center rounded-full border-2',
-                hasSubscription === 'no' ? 'border-electric-600' : 'border-slate-300',
+                hasSubscription === 'no' ? 'border-leaf-600' : 'border-slate-300',
               )}
             >
-              {hasSubscription === 'no' && <span className="h-2 w-2 rounded-full bg-electric-600" />}
+              {hasSubscription === 'no' && <span className="h-2 w-2 rounded-full bg-leaf-600" />}
             </span>
             No, I want to buy a package
           </button>
@@ -166,7 +166,7 @@ export function TokenLoginPage() {
                 type="button"
                 onClick={() => setShowToken((v) => !v)}
                 aria-label={showToken ? 'Hide token' : 'Show token'}
-                className="absolute right-0 top-0 flex h-full w-11 items-center justify-center rounded-r-lg text-slate-500 transition hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-electric-500"
+                className="absolute right-0 top-0 flex h-full w-11 items-center justify-center rounded-r-lg text-slate-500 transition hover:text-slate-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-leaf-500"
               >
                 {showToken ? <EyeOff size={18} aria-hidden /> : <Eye size={18} aria-hidden />}
               </button>
@@ -208,7 +208,7 @@ export function TokenLoginPage() {
       <div className="mt-5 rounded-xl border border-slate-200 bg-white p-4 shadow-card">
         <Link
           to="/device-replacement"
-          className="flex min-h-[44px] items-center justify-between gap-3 text-sm font-medium text-slate-700 hover:text-electric-600"
+          className="flex min-h-[44px] items-center justify-between gap-3 text-sm font-medium text-slate-700 hover:text-leaf-600"
         >
           <span>Lost your phone? Request a device replacement</span>
           <span aria-hidden>→</span>
@@ -216,7 +216,7 @@ export function TokenLoginPage() {
         <div className="my-1 h-px bg-slate-100" aria-hidden />
         <Link
           to="/buy"
-          className="flex min-h-[44px] items-center justify-between gap-3 text-sm font-medium text-slate-700 hover:text-electric-600"
+          className="flex min-h-[44px] items-center justify-between gap-3 text-sm font-medium text-slate-700 hover:text-leaf-600"
         >
           <span>Don’t have a subscription? Buy a package</span>
           <span aria-hidden>→</span>

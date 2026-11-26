@@ -4,20 +4,38 @@ export default {
   theme: {
     extend: {
       colors: {
-        // Design language (§14): deep navy primary, electric blue accent
-        navy: {
-          950: '#071527',
-          900: '#0B1F3A',
-          800: '#12294A',
-          700: '#1A365D',
-          600: '#24436E',
+        // Design language (§14, refreshed to the green Wi-Fi kit): mint page
+        // surfaces, forest-green panels, leaf-green accents, citrus CTAs.
+        // Status semantics stay green / amber / red (NFR-02).
+        mint: {
+          50: '#F6FBF1',
+          100: '#EAF7E1', // page background
+          200: '#DDEFD0',
+          300: '#CBE8B4',
         },
-        electric: {
-          50: '#EFF6FF',
-          100: '#DBEAFE',
-          500: '#3B82F6',
-          600: '#2563EB',
-          700: '#1D4ED8',
+        forest: {
+          950: '#0E1F10', // overlays
+          900: '#163019', // headers, sidebar, hero panels
+          800: '#1E4223', // hover
+          700: '#27552E', // borders on dark
+          600: '#2F6B3A',
+        },
+        leaf: {
+          50: '#F1FAEA',
+          100: '#DDF3CD',
+          200: '#BCE8A1',
+          500: '#2E9E44', // focus borders (≥3:1 on white)
+          600: '#2E7D32', // links, active states (≥4.5:1 on white)
+          700: '#1B5E20',
+          800: '#14532D',
+        },
+        citrus: {
+          50: '#FFF7E8',
+          100: '#FFECC6',
+          200: '#FDD68A',
+          500: '#F5A623', // primary CTA fill (dark text on top, ≥4.5:1)
+          600: '#E8930A', // CTA hover
+          700: '#B45309', // orange text on white (≥4.5:1)
         },
       },
       fontFamily: {

@@ -18,7 +18,7 @@ export function Stepper({ steps, current }: StepperProps) {
               className={cn(
                 'flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-bold transition-colors',
                 i < current && 'bg-green-100 text-green-700',
-                i === current && 'bg-electric-600 text-white',
+                i === current && 'bg-leaf-600 text-white',
                 i > current && 'bg-slate-100 text-slate-400',
               )}
               aria-current={i === current ? 'step' : undefined}
@@ -45,7 +45,7 @@ export function Stepper({ steps, current }: StepperProps) {
         <span className="text-sm text-slate-500">{steps[current]}</span>
         <span className="h-1.5 flex-1 overflow-hidden rounded-full bg-slate-100">
           <span
-            className="block h-full rounded-full bg-electric-600 transition-all"
+            className="block h-full rounded-full bg-leaf-600 transition-all"
             style={{ width: `${((current + 1) / steps.length) * 100}%` }}
           />
         </span>
