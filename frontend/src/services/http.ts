@@ -49,6 +49,12 @@ export async function request<T>(
   if (res.status === 204) return undefined as T;
 
   const text = await res.text();
+  // A26 returns text/csv, not JSON — JSON.parse would silently yield null and
+  // download an empty file in live mode. Keep the raw body for CSV responses.
+  if (res.headers.get('content-type')?.includes('text/csv')) {
+    return text as T;
+  }
+
   let payload: unknown = null;
   try {
     payload = text ? JSON.parse(text) : null;

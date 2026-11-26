@@ -52,6 +52,15 @@ public class AccessToken {
     @Column(name = "revoked_at")
     private Instant revokedAt;
 
+    /**
+     * D-028: AES-GCM ciphertext (Base64 IV||CT) of the raw token, escrowed ONLY
+     * while the token is ACTIVE so A22 can re-send the SAME value. NULL when the
+     * escrow key is not configured or after revocation/expiry — never a second
+     * raw copy in logs or API responses.
+     */
+    @Column(name = "raw_token_cipher", columnDefinition = "text")
+    private String rawTokenCipher;
+
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
@@ -85,6 +94,8 @@ public class AccessToken {
     public void setExpiresAt(Instant expiresAt) { this.expiresAt = expiresAt; }
     public Instant getRevokedAt() { return revokedAt; }
     public void setRevokedAt(Instant revokedAt) { this.revokedAt = revokedAt; }
+    public String getRawTokenCipher() { return rawTokenCipher; }
+    public void setRawTokenCipher(String rawTokenCipher) { this.rawTokenCipher = rawTokenCipher; }
     public Instant getCreatedAt() { return createdAt; }
     public void setCreatedAt(Instant createdAt) { this.createdAt = createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }

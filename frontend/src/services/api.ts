@@ -685,6 +685,7 @@ export async function listSubscriptions(q: SubscriptionQuery = {}): Promise<Page
     const params = new URLSearchParams();
     if (q.status) params.set('status', q.status);
     if (q.search) params.set('search', q.search);
+    if (q.expiringWithinHours) params.set('expiringWithinHours', String(q.expiringWithinHours));
     params.set('page', String(q.page ?? 1));
     params.set('size', String(q.size ?? 25));
     return delay(request<Paged<SubscriptionAdmin>>(`/admin/subscriptions?${params}`), 0);

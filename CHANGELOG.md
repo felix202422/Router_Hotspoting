@@ -6,6 +6,38 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added — Phase 2, A5–A30 admin REST API (2026-11-26)
+- Seven admin controllers + services implement the remaining contract endpoints:
+  dashboard/analytics (**A5**, **A23–A26**), customers/devices/replacement queue
+  (**A6–A12**), packages (**A13–A16**), subscriptions (**A17–A20**), payments and
+  token resend (**A21/A22**), controller-backed network state (**A27–A29**) and
+  the audit trail (**A30**). All paged lists use the shipped frontend's 1-based
+  `Paged<T>{items,page,size,total}` shape; admin mutations are audited with IP.
+- **A22 resend-token** re-delivers the SAME token via AES-GCM escrow of the
+  active raw value (additive `V4__token_escrow.sql`, key only from
+  `TOKEN_ESCROW_KEY`); revoked/expired tokens and missing escrow return 409
+  with no token disclosure (D-028).
+- Analytics bucket by Africa/Dar_es_Salaam days/weeks/months with zero-filled
+  gaps; revenue counts verified SUCCESS payments, refunds are separate and
+  `profitTzs` stays `null` until expenses are tracked (D-033). A26 streams raw
+  `text/csv`; `frontend/src/services/http.ts` no longer JSON-parses it.
+- **A8/A19 resume** now rotates a fresh token, re-applies the controller grant
+  and sends the token SMS — an ACTIVE subscription is never left without access;
+  grants use the current package limits, not the payment snapshot (D-032).
+
+### Fixed — A5–A30 smoke findings
+- Customer paging no longer uses `Sort.nullsLast()` (unsupported by Spring Data
+  JPA Criteria → 500); ordering is an explicit CASE so never-seen customers
+  sort last.
+- Live-mode `listSubscriptions()` now forwards `expiringWithinHours` to A17;
+  previously the filter was silently ignored outside mock mode.
+
+### Verified — A5–A30 smoke against the running backend (PostgreSQL 18)
+- Flyway V4 applied; every A5–A30 endpoint returned its expected status with
+  **zero 500s**; no-token admin request → 401; A22 → 204 for an active escrow
+  and 409 for a revoked subscription; network endpoints showed MOCK controller
+  facts only. `mvn -q test` green.
+
 ### Added — Phase 2, P1–P7 customer portal API (2026-11-26)
 - `PortalController` + `PortalService`: **P1** `GET /packages` (DB-only active
   packages), **P5** `POST /auth/token-login` (generic 401 for every invalid

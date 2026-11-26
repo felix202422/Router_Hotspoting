@@ -63,6 +63,9 @@ app:
     # Optional comma-separated webhook source allowlist (P4). Empty = any signed
     # source (dev); production sets this via env and nginx overwrites X-Forwarded-For.
     webhook-allowed-ips: ${WEBHOOK_ALLOWED_IPS:}
+    # D-028/A22: env-only AES-GCM escrow key for re-sending the SAME raw token.
+    # When absent, resend honestly returns 409 (no raw copy is persisted).
+    token-escrow-key: ${TOKEN_ESCROW_KEY:}
   scheduler:
     expiry-sweep-enabled: true
     expiry-sweep-ms: 60000                  # fixed delay, every minute (§4.2) — read by ExpiryService

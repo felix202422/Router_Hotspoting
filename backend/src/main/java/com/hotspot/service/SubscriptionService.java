@@ -130,13 +130,14 @@ public class SubscriptionService {
 
     private void applyGrant(Subscription subscription, Customer customer, Payment payment) {
         try {
+            com.hotspot.domain.Package pkg = subscription.getPkg();
             GrantResult result = controller.grantAccess(new GrantRequest(
                     subscription.getId(),
                     customer.getPhoneE164(),
                     subscription.getEndsAt(),
-                    payment.getPkg().getMaxDownloadKbps(),
-                    payment.getPkg().getMaxUploadKbps(),
-                    payment.getPkg().getDeviceLimit()));
+                    pkg.getMaxDownloadKbps(),
+                    pkg.getMaxUploadKbps(),
+                    pkg.getDeviceLimit()));
             if (result.ok()) {
                 if (sessions.findByControllerSessionId(result.grantRef()).isEmpty()) {
                     ActiveSession row = new ActiveSession();
@@ -167,7 +168,11 @@ public class SubscriptionService {
         audit.recordSystem("SUBSCRIPTION_SUSPEND", "subscription", subscription.getId(), reason);
     }
 
-    /** Resume (A19): only while the purchased time is still valid. */
+    /**
+     * Resume (A8/A19): only while the purchased time is still valid. Suspend
+     * revoked the token/grant, so a real resume MUST issue a fresh token, grant
+     * and token SMS — otherwise the customer would be "ACTIVE" without access.
+     */
     @Transactional
     public void resume(Subscription subscription) {
         if (!subscription.getEndsAt().isAfter(Instant.now())) {
@@ -177,6 +182,11 @@ public class SubscriptionService {
         subscription.setStatus(SubscriptionStatus.ACTIVE);
         subscription.setSuspendedReason(null);
         subscriptions.save(subscription);
+
+        Customer customer = subscription.getCustomer();
+        String rawToken = tokenService.rotate(subscription, subscription.getEndsAt());
+        applyGrant(subscription, customer, subscription.getPayment());
+        smsService.sendToken(customer, subscription, rawToken, subscription.getPkg().getName());
         audit.recordSystem("SUBSCRIPTION_RESUME", "subscription", subscription.getId(), "Resumed");
     }
 

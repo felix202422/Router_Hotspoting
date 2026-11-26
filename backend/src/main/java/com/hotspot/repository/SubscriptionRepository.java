@@ -28,4 +28,8 @@ public interface SubscriptionRepository extends JpaRepository<Subscription, Long
     long countByStatusAndEndsAtAfter(SubscriptionStatus status, Instant after);
 
     List<Subscription> findByStatusAndEndsAtBetween(SubscriptionStatus status, Instant from, Instant to);
+
+    @Query("select count(s) from Subscription s where s.pkg.id = :packageId "
+            + "and s.status = com.hotspot.domain.SubscriptionStatus.ACTIVE and s.endsAt > :now")
+    long countActiveByPackageId(@Param("packageId") Long packageId, @Param("now") Instant now);
 }
