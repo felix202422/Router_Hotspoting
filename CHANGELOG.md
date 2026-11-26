@@ -6,9 +6,64 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Changed — Design refresh: green "Wi-Fi hotspot" kit (D-026)
+- Tailwind theme remapped from navy/electric-blue to the owner-supplied green reference:
+  `mint-*` page surfaces, `forest-*` headers/sidebar/hero panels, `leaf-*` accents,
+  `citrus-*` CTAs. Class tokens renamed `navy-*`→`forest-*`, `electric-*`→`leaf-*`
+  across 22 files (mechanical rename, no layout changes).
+- Primary buttons are citrus orange with dark forest text (≈7:1 contrast, NFR-02/WCAG AA);
+  portal header is now a light-lime bar with an orange Wi-Fi chip; admin sidebar keeps the
+  dark forest panel with a citrus active-nav; landing hero is a dark forest panel with
+  citrus icon chip; charts use leaf/citrus series colors instead of `#2563EB`.
+- `index.html` theme-color → `#163019`; body background → mint.
+
+### Fixed
+- `DataTable`: stacked-card view now extends to `<1024px` (`md`→`lg`) — dense admin tables
+  (Subscriptions, Network) overflowed the 768×1024 viewport, violating NFR-01's
+  "never horizontal scroll" rule.
+
+### Verified
+- `npm run build` — tsc clean + Vite production build.
+- Responsive matrix: 12 routes × 6 viewports (360×800, 390×844, 768×1024, 1024×768,
+  1366×768, 1920×1080) — zero horizontal overflow everywhere; zero console errors on
+  portal landing, admin login/overview/analytics.
+
+### Added — Phase 1 stabilization (2026-11-26, after technical audit)
+- Backend **compiles for the first time**: fixed the 5 compile errors found by the audit —
+  missing imports (`GlobalExceptionHandler`, `GrantRequest`) and jjwt 0.12.6
+  `Instant`→`Date` conversions (`JwtService`). `mvn -q test` now exits 0.
+- `PaymentWebhookService` — idempotent payment-result core (FR-M02/M03): consumes the
+  previously-orphaned `MockPaymentResultEvent` (audit KI-2), first-verified-result-wins
+  guard against replays, single activation path (`SubscriptionService.activateOrExtend`)
+  shared with the future Daraja webhook — no separate fake-success branch.
+- `RateLimitService.scheduledPrune()` — scheduled bucket housekeeping (audit KI-4, partial).
+- Flyway `V3__session_ip_nullable.sql` (D-027): `active_sessions.ip_address` may be NULL;
+  placeholder `10.10.0.2` removed from the grant flow (FR-D06, audit KI-6).
+- `application.yml`: dead `expiry-sweep-cron` key replaced with the `expiry-sweep-ms` key
+  `ExpiryService` actually reads (audit KI-7).
+
+### Added — Technical audit deliverables (2026-11-25)
+- `docs/audit/` — 13 documents: project overview, system architecture, module docs,
+  database docs (ER), API docs, frontend docs, security audit, testing report,
+  implementation status matrix, known issues, improvement roadmap, development guide and
+  the master system documentation. Read-only audit: no application code was modified
+  while it ran; every claim is traceable to source evidence and executed commands.
+
 ### Added — Phase 4: Backend Development (in progress)
-- Project scaffolding pending this section's first commit (Spring Boot 3 / Java 21,
-  Flyway `V1__init.sql` from the Phase 2 ER, API contract implementation).
+- Spring Boot 3.5.7 / Java 21 project: `pom.xml` (validation, springdoc, jjwt 0.12.6,
+  Flyway), env-driven `application.yml`, `.env.example`.
+- Flyway migrations: `V1__init.sql` (Phase 2 ER baseline, D-021) +
+  `V2__admin_refresh_tokens.sql` (additive admin refresh-token storage, D-025).
+- Domain layer: 15 JPA entities + 14 enums mirroring the ER; 15 Spring Data repositories.
+- Security: `JwtService`, `JwtAuthenticationFilter`, `SecurityConfig`,
+  `ProblemDetailHandlers` (RFC 9457).
+- Common: `ApiProblem`, `GlobalExceptionHandler`, `TraceIds`, `RateLimitService`,
+  `AuditService`.
+- Integration adapters (mock-first): payment (mock + Daraja), SMS (mock + Africa's Talking),
+  hotspot controller (mock / null / MikroTik).
+- Core services: `CustomerService`, `TokenService`, `SmsService`, `SubscriptionService`,
+  `ExpiryService` (pessimistic-lock sweep, `@Scheduled` every minute),
+  `BootstrapAdmin` (creates the first admin from `ADMIN_EMAIL`/`ADMIN_PASSWORD` env vars).
 
 ## [0.3.0] — 2026-11-24
 

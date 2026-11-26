@@ -1,6 +1,6 @@
 # Decision Log
 
-**Phase:** 3 — Frontend Development (append-only log since Phase 1)
+**Phase:** 4 — Backend Development (append-only log since Phase 1)
 **Rule:** every architectural decision is recorded here with rationale. Append-only; supersede
 by adding a new entry referencing the old ID.
 
@@ -30,6 +30,9 @@ by adding a new entry referencing the old ID.
 | D-022 | 2026-11-24 | **Frontend consumes a single API facade** (`services/api.ts`) with mock/live modes switched by `VITE_API_MODE`; mock backend simulates the Phase 2 contract (idempotent purchase, D-007 extension, token rotation, rate limits, TZ-day analytics) so Phase 3 is verifiable without a backend | Phase 3 implementation; master prompt A17 (mock explicitly not production) | ✅ Approved |
 | D-023 | 2026-11-24 | **Mock admin login persists access + profile in localStorage identically to live mode** (bug fix: reload previously bounced admins to the login page because the mock branch skipped token storage) | Phase 3 browser smoke test finding | 🛠 Fixed in 0.3.0 |
 | D-024 | 2026-11-24 | **Phase 3 (frontend) approved by owner** ("approve all the past phases which have not been approved … and start next phase") — portal + admin UI, mock API facade, responsive verification accepted; **Phase 4 (backend) authorized to begin** | Owner approval message | ✅ Approved |
+| D-025 | 2026-11-25 | Admin refresh-token storage is an **additive** Flyway migration (`V2__admin_refresh_tokens.sql`); `V1__init.sql` stays byte-identical to the Phase 2 ER baseline (D-021) | Phase 4 implementation | ✅ Confirmed |
+| D-026 | 2026-11-25 | **Design refresh: green "Wi-Fi hotspot" kit** — mint page surfaces, forest-green panels/sidebar, leaf-green accents, citrus-orange CTAs (dark forest text keeps ≥4.5:1, NFR-02); status semantics stay green/amber/red. Replaces the Phase 2 navy/electric-blue palette at class-token level (`navy-*`→`forest-*`, `electric-*`→`leaf-*`); owner supplied the reference image | Owner instruction: "try to follow the design and color but remember it is for wifi hotspotting" | ✅ Applied |
+| D-027 | 2026-11-26 | **Session client IP stored as NULL until the controller reports it** — placeholder `10.10.0.2` removed from the grant flow (FR-D06 "never fabricated"); constraint relaxed by additive migration `V3__session_ip_nullable.sql`; `V1`/`V2` stay byte-identical (D-021/D-025) | Technical audit finding KI-6 (`docs/audit/KNOWN_ISSUES.md`) | ✅ Applied |
 
 ## Open items (blockers for later phases, not for Phase 1 approval)
 
