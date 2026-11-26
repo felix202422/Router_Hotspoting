@@ -11,10 +11,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.TransactionDefinition;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
  * Audit trail writer (§15, FR-A06): every admin mutation is recorded with
  * actor, action, entity and a redacted before/after JSON diff.
+ *
+ * Audit rows are written in their OWN transaction (REQUIRES_NEW): a failed
+ * audit INSERT must never mark the caller's transaction rollback-only —
+ * catching the exception inside the shared transaction still poisons it and
+ * the business commit fails with UnexpectedRollbackException (found at the
+ * first runtime boot, see CHANGELOG). Trade-off: an audit row can outlive a
+ * business rollback; callers invoke record() as their last step, so the only
+ * window is a commit failure after that point.
  */
 @Service
 public class AuditService {
@@ -23,10 +34,14 @@ public class AuditService {
 
     private final AuditLogRepository repository;
     private final ObjectMapper objectMapper;
+    private final TransactionTemplate auditTx;
 
-    public AuditService(AuditLogRepository repository, ObjectMapper objectMapper) {
+    public AuditService(AuditLogRepository repository, ObjectMapper objectMapper,
+                        PlatformTransactionManager transactionManager) {
         this.repository = repository;
         this.objectMapper = objectMapper;
+        this.auditTx = new TransactionTemplate(transactionManager);
+        this.auditTx.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
     }
 
     /** Administrator currently authenticated in this request (null for system flows). */
@@ -51,7 +66,8 @@ public class AuditService {
             entry.setBeforeJson(toJson(before));
             entry.setAfterJson(toJson(after));
             entry.setIpAddress(ipAddress);
-            repository.save(entry);
+            // own transaction: a failure here rolls back only this insert
+            auditTx.executeWithoutResult(status -> repository.save(entry));
         } catch (RuntimeException e) {
             // The audited action itself must not fail because of logging problems.
             log.error("Failed to write audit entry action={} entity={}#{}", action, entityType, entityId, e);

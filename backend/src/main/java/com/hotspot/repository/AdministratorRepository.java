@@ -8,5 +8,8 @@ public interface AdministratorRepository extends JpaRepository<Administrator, Lo
 
     Optional<Administrator> findByEmail(String email);
 
+    /** Case-insensitive lookup for login (stored case comes from ADMIN_EMAIL env). */
+    Optional<Administrator> findByEmailIgnoreCase(String email);
+
     boolean existsByEmail(String email);
 }

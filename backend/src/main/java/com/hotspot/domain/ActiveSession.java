@@ -14,6 +14,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import org.hibernate.annotations.ColumnTransformer;
 
 /** Live/historical controller session (ER §active_sessions). */
 @Entity
@@ -33,8 +34,10 @@ public class ActiveSession {
     private String controllerSessionId;
 
     /** Postgres INET column — Java side keeps the canonical string form.
-     *  NULL until the controller reports the real client IP (FR-D06). */
+     *  NULL until the controller reports the real client IP (FR-D06).
+     *  Explicit cast: Hibernate binds String as varchar, INET rejects it. */
     @Column(name = "ip_address", columnDefinition = "inet")
+    @ColumnTransformer(write = "cast(? as inet)")
     private String ipAddress;
 
     @Column(name = "mac_hint", length = 17)

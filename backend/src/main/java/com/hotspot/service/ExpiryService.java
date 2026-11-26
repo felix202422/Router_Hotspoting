@@ -37,7 +37,13 @@ public class ExpiryService {
         this.audit = audit;
     }
 
-    /** One sweep pass — public for tests and manual triggering. */
+    /**
+     * One sweep pass — public for tests and manual triggering.
+     * NOTE: the @Scheduled entry point below is ALSO @Transactional: it runs
+     * outside any request, and the internal call would otherwise bypass this
+     * proxy (self-invocation) leaving the pessimistic-lock query without a
+     * transaction ("Query requires transaction be in progress").
+     */
     @Transactional
     public int sweepOnce() {
         Instant now = Instant.now();
@@ -53,6 +59,7 @@ public class ExpiryService {
     }
 
     @Scheduled(fixedDelayString = "${app.scheduler.expiry-sweep-ms:60000}")
+    @Transactional
     public void scheduledSweep() {
         try {
             sweepOnce();

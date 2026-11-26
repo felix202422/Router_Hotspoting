@@ -14,6 +14,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import org.hibernate.annotations.ColumnTransformer;
 
 /**
  * Provider callback record (ER §payment_webhook_events).
@@ -40,8 +41,10 @@ public class WebhookEvent {
     @Column(name = "signature_valid", nullable = false)
     private boolean signatureValid;
 
-    /** Raw provider payload as JSON text, secrets stripped (NFR-05). */
+    /** Raw provider payload as JSON text, secrets stripped (NFR-05).
+     *  Explicit cast: Hibernate binds String as varchar, JSONB rejects it. */
     @Column(nullable = false, columnDefinition = "jsonb")
+    @ColumnTransformer(write = "cast(? as jsonb)")
     private String payload;
 
     @Enumerated(EnumType.STRING)

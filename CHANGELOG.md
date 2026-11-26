@@ -6,6 +6,58 @@ Versioning follows [Semantic Versioning](https://semver.org/).
 
 ## [Unreleased]
 
+### Added — Phase 2, A1–A4 admin auth (2026-11-26)
+- `AuthController` + `AdminAuthService`: **A1** `POST /api/v1/admin/auth/login`
+  (bcrypt, one generic 401 for unknown-email vs wrong-password — no account
+  enumeration; disabled account → 403; rate limit 5/min per IP with reset on
+  success), **A2** `POST …/refresh` (rotation family per login, reuse detection:
+  presenting an already-rotated token revokes the whole family and forces
+  re-login), **A3** `POST …/logout` (idempotent 204), **A4** `GET …/me`.
+  Response shape matches the frontend `AuthResponse`/`AdminProfile` exactly
+  (accessToken, refreshToken, expiresIn, profile{id,email,fullName,role}).
+- DTOs `LoginRequest`, `RefreshRequest`, `AuthResponse`, `ProfileDto`;
+  `AdministratorRepository.findByEmailIgnoreCase` for case-insensitive login.
+- `SecurityConfig` needed no change: its default-deny allow-list already
+  permits exactly login/refresh/logout; everything else under
+  `/api/v1/admin/**` requires ROLE_ADMIN.
+
+### Fixed — three runtime bugs found at the first boots (compile was green)
+- `GlobalExceptionHandler` no longer extends `ResponseEntityExceptionHandler`:
+  the superclass's inherited `@ExceptionHandler(MethodArgumentNotValidException)`
+  collided with the custom validation handler — **application context failed to
+  start** ("Ambiguous @ExceptionHandler method mapped"). Rewritten standalone
+  with explicit handlers (validation 400, malformed body 400, type mismatch 400,
+  missing param 400, 405, 415, 404, catch-all 500) — all RFC 9457 problem+json.
+- `ExpiryService.scheduledSweep()` is now `@Transactional`: the scheduler
+  self-invoked `sweepOnce()` bypassing the proxy, so the pessimistic-lock query
+  ran with no transaction ("Query requires transaction be in progress",
+  logged every 60 s).
+- **JDBC type mismatch (jsonb/inet)**: Hibernate binds `String` parameters as
+  `varchar`, which PostgreSQL rejects for `JSONB`/`INET` columns — every audit
+  insert failed (`column "after_json" is of type jsonb but expression is of type
+  character varying`). Fixed with `@ColumnTransformer(write = "cast(? as jsonb|inet)")`
+  on `AuditLog.beforeJson/afterJson/ipAddress`, `ActiveSession.ipAddress`,
+  `WebhookEvent.payload` (casts verified against PostgreSQL 18 before use).
+
+### Fixed — transaction-poisoning patterns (caught by the A1–A4 smoke test)
+- `AuditService` writes audit rows in their **own** transaction
+  (`REQUIRES_NEW`): the previous catch-inside-the-shared-transaction still
+  left it rollback-only, so a failed audit insert turned the whole login into
+  `UnexpectedRollbackException` 500.
+- `AdminAuthService` revokes refresh-token families (A2 reuse detection,
+  disabled account) in their **own** transaction: the following `throw 401/403`
+  used to roll the revocation back — the smoke test proved a replayed token
+  still worked after "reuse detected"; it now correctly returns 401 for every
+  token in the family.
+
+### Verified — A1–A4 smoke suite against the running backend (PostgreSQL 18)
+- login → me → refresh (rotated) → replay old token → **401** → replay new
+  token → **401** (family revoked) → logout → **204**; `/me` without token →
+  **401**; wrong password → **401** generic; 6 rapid bad logins →
+  `401,401,401,401,401,429` and a correct login is also blocked during the
+  lockout. Flyway V1→V2→V3 applied; audit rows confirmed in
+  `system_audit_logs` (jsonb + inet intact); expiry sweep runs without errors.
+
 ### Changed — Design refresh: green "Wi-Fi hotspot" kit (D-026)
 - Tailwind theme remapped from navy/electric-blue to the owner-supplied green reference:
   `mint-*` page surfaces, `forest-*` headers/sidebar/hero panels, `leaf-*` accents,

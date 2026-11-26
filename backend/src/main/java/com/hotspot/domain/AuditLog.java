@@ -10,6 +10,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.time.Instant;
+import org.hibernate.annotations.ColumnTransformer;
 
 /** Immutable audit trail (ER §system_audit_logs, §15). Append-only, no updates. */
 @Entity
@@ -36,14 +37,23 @@ public class AuditLog {
     @Column(name = "entity_id", nullable = false)
     private Long entityId;
 
-    /** Optional before-state as JSON text (secrets stripped). */
+    /**
+     * Optional before-state as JSON text (secrets stripped).
+     * The column is JSONB (V1) but Hibernate binds String parameters as
+     * varchar, which PostgreSQL rejects ("expression is of type character
+     * varying") — the explicit cast fixes the write side; reads via
+     * getString() work natively. Same for the INET ip_address below.
+     */
     @Column(name = "before_json", columnDefinition = "jsonb")
+    @ColumnTransformer(write = "cast(? as jsonb)")
     private String beforeJson;
 
     @Column(name = "after_json", columnDefinition = "jsonb")
+    @ColumnTransformer(write = "cast(? as jsonb)")
     private String afterJson;
 
     @Column(name = "ip_address", columnDefinition = "inet")
+    @ColumnTransformer(write = "cast(? as inet)")
     private String ipAddress;
 
     @Column(name = "created_at", nullable = false)
